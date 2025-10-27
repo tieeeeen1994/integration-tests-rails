@@ -9,7 +9,7 @@ module IstanbulCupriteRails
     class << self
       def setup
         config = IstanbulCupriteRails.configuration
-        
+
         require 'capybara/cuprite'
 
         ::Capybara.javascript_driver = :cuprite

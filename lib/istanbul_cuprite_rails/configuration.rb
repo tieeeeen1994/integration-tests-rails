@@ -2,19 +2,18 @@
 
 module IstanbulCupriteRails
   class Configuration
-    attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path
-    attr_accessor :wait_time, :remote, :chrome_url, :webmock
+    attr_reader :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote, :chrome_url, :webmock
 
     def initialize
       @source_dir = 'app/javascript'
       @output_dir = 'tmp/instrumented_js'
       @backup_dir = 'tmp/js_backup'
       @coverage_path = 'coverage/nyc'
-      
+
       # Capybara configuration
       @wait_time = 5
-      @remote = nil  # nil = auto-detect from ENV
-      @chrome_url = nil  # nil = use ENV['CHROME_URL']
+      @remote = nil # nil = auto-detect from ENV
+      @chrome_url = nil # nil = use ENV['CHROME_URL']
       @webmock = true
     end
 

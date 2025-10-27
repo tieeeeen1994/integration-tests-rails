@@ -11,9 +11,7 @@ module IstanbulCupriteRails
         Collector.setup
       end
 
-      def collect(page)
-        Collector.collect(page)
-      end
+      delegate :collect, to: :Collector
 
       def teardown
         Collector.generate_report
