@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'cuprite'
   spec.add_dependency 'rails'
   spec.add_dependency 'rspec-rails'
+  spec.add_dependency 'webmock'
 end
