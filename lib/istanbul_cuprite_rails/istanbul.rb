@@ -2,6 +2,7 @@
 
 require_relative 'istanbul/instrumenter'
 require_relative 'istanbul/collector'
+require_relative 'istanbul/util'
 
 module IstanbulCupriteRails
   module Istanbul
@@ -11,7 +12,7 @@ module IstanbulCupriteRails
         Collector.setup
       end
 
-      def collect(page) # rubocop:disable Rails/Delegate
+      def collect(page)
         Collector.collect(page)
       end
 

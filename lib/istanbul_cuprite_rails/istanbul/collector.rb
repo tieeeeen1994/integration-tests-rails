@@ -28,13 +28,10 @@ module IstanbulCupriteRails
           coverage_data = page.evaluate_script('window.__coverage__')
           save_coverage_snapshot(coverage_data) if coverage_data.present?
         rescue StandardError => e
-          Capybara::Util.log "Coverage collection failed: #{e.message}"
+          Util.log "Coverage collection failed: #{e.message}"
         end
 
         def generate_report
-          config = IstanbulCupriteRails.configuration
-          root = Rails.root
-
           # Generate report using Node.js (will merge all snapshot files)
           report_script = build_report_script
           output = `node -e #{Shellwords.escape(report_script)} 2>&1`.strip
@@ -62,7 +59,7 @@ module IstanbulCupriteRails
 
           FileUtils.rm_rf(source_dir)
           FileUtils.cp_r(backup_dir, source_dir)
-          Capybara::Util.log '✓ Restored original JavaScript files'
+          Util.log '✓ Restored original JavaScript files'
         end
 
         private

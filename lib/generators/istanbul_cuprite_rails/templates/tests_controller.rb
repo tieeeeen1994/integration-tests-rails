@@ -2,9 +2,9 @@
 
 # Controller for Istanbul Cuprite Rails JavaScript testing
 # This provides a minimal page that loads your JavaScript
-class TestsController < ActionController::Base # rubocop:disable Rails/ApplicationController
+class TestsController < ActionController::Base
   def index
-    render inline: <<~HTML # rubocop:disable Rails/RenderInline
+    render inline: <<~HTML.squish
       <!DOCTYPE html>
       <html lang="en">
         <head>

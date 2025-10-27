@@ -14,7 +14,7 @@ module IstanbulCupriteRails
       @puma_threads = '1:1'
       @remote = false
       @server_host = '0.0.0.0' # rubocop:disable Style/IpAddresses
-      @server_port = ENV.fetch('CAPYBARA_PORT', 9888).to_i
+      @server_port = nil
       @source_dir = 'app/javascript'
       @timeout = 30
       @verbose = false

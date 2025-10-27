@@ -41,7 +41,7 @@ module IstanbulCupriteRails
         end
 
         def log(message)
-          puts "[CAPYBARA] #{message}" if verbose? # rubocop:disable Rails/Output
+          puts "[CAPYBARA] #{message}" if verbose?
         end
       end
     end

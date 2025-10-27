@@ -1,0 +1,5 @@
+plugins:
+  - rubocop-nueca
+
+Rails:
+  Enabled: false
