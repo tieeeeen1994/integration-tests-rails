@@ -14,14 +14,10 @@ module IstanbulCupriteRails
 
         ::Capybara.javascript_driver = :cuprite
 
-        # Auto-detect remote mode if not specified
-        remote = config.remote.nil? ? Util.remote? : config.remote
-        chrome_url = config.chrome_url
-
-        if remote
-          Remote.setup(wait_time: config.wait_time, chrome_url: chrome_url)
+        if config.remote
+          Remote.setup
         else
-          Local.setup(wait_time: config.wait_time)
+          Local.setup
         end
 
         Util.configure_rspec

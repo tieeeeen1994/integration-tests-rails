@@ -4,8 +4,10 @@ module IstanbulCupriteRails
   module Capybara
     module Local
       class << self
-        def setup(wait_time:)
-          ::Capybara.default_max_wait_time = wait_time
+        def setup
+          config = IstanbulCupriteRails.configuration
+
+          ::Capybara.default_max_wait_time = config.wait_time
           ::Capybara.server = :puma, { Silent: !Util.verbose? }
 
           register_driver
@@ -15,9 +17,11 @@ module IstanbulCupriteRails
         private
 
         def register_driver
+          config = IstanbulCupriteRails.configuration
+
           ::Capybara.register_driver(:cuprite) do |app|
             options = {
-              window_size: Util::WINDOW_SIZE,
+              window_size: config.window_size,
               browser_options: {
                 'no-sandbox' => nil,
                 'disable-dev-shm-usage' => nil,

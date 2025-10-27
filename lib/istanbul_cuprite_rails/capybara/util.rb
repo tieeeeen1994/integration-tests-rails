@@ -3,13 +3,8 @@
 module IstanbulCupriteRails
   module Capybara
     module Util
-      MAX_SERVER_RETRIES = 1000
-      WINDOW_SIZE = [1920, 1080].freeze
-
       class << self
         def configure_webmock
-          return unless defined?(WebMock)
-
           WebMock.disable_net_connect!(allow_localhost: true)
           log 'WebMock configured to allow localhost connections'
         end
@@ -17,18 +12,19 @@ module IstanbulCupriteRails
         def ensure_server_ready(context)
           return if @server_ready
 
+          config = IstanbulCupriteRails.configuration
           log "Waiting for server on #{::Capybara.app_host.presence || 'localhost'} to start..."
 
-          MAX_SERVER_RETRIES.times do |attempt|
+          config.max_server_retries.times do |attempt|
             context.visit('/400')
             @server_ready = true
             log 'Server is ready!'
             break
           rescue StandardError
-            log "Server not ready (attempt #{attempt + 1}/#{MAX_SERVER_RETRIES})."
+            log "Server not ready (attempt #{attempt + 1}/#{config.max_server_retries})."
           end
 
-          log "Server did not start after #{MAX_SERVER_RETRIES} attempts..." unless @server_ready
+          log "Server did not start after #{config.max_server_retries} attempts..." unless @server_ready
         end
 
         def configure_rspec
@@ -38,14 +34,6 @@ module IstanbulCupriteRails
               IstanbulCupriteRails::Capybara::Util.ensure_server_ready(self)
             end
           end
-        end
-
-        def remote?
-          config = IstanbulCupriteRails.configuration
-          return config.remote unless config.remote.nil?
-
-          # Auto-detect from ENV if not explicitly configured
-          ENV['CAPYBARA_REMOTE'].to_s.downcase.in?(['true', '1', 'yes'])
         end
 
         def verbose?
