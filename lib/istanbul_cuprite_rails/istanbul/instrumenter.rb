@@ -19,14 +19,14 @@ module IstanbulCupriteRails
 
           # Find all JS files
           js_files = Dir.glob(config.source_path(root).join('**/*.js'))
-          puts "Instrumenting #{js_files.length} JavaScript files..."
+          Capybara::Util.log "Instrumenting #{js_files.length} JavaScript files..."
 
           js_files.each do |file|
             instrument_file(file)
           end
 
-          puts '✓ Instrumented files created'
-          puts '=== Istanbul Instrumentation Complete ==='
+          Capybara::Util.log '✓ Instrumented files created'
+          Capybara::Util.log '=== Istanbul Instrumentation Complete ==='
         end
 
         def instrument_file(file)

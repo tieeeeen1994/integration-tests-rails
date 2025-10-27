@@ -11,7 +11,9 @@ module IstanbulCupriteRails
         Collector.setup
       end
 
-      delegate :collect, to: :Collector
+      def collect(page) # rubocop:disable Rails/Delegate
+        Collector.collect(page)
+      end
 
       def teardown
         Collector.generate_report

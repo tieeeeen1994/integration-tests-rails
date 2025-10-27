@@ -16,7 +16,7 @@ module IstanbulCupriteRails
 
         # Auto-detect remote mode if not specified
         remote = config.remote.nil? ? Util.remote? : config.remote
-        chrome_url = config.chrome_url || ENV.fetch('CHROME_URL', nil)
+        chrome_url = config.chrome_url
 
         if remote
           Remote.setup(wait_time: config.wait_time, chrome_url: chrome_url)

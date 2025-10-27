@@ -41,15 +41,19 @@ module IstanbulCupriteRails
         end
 
         def remote?
+          config = IstanbulCupriteRails.configuration
+          return config.remote unless config.remote.nil?
+
+          # Auto-detect from ENV if not explicitly configured
           ENV['CAPYBARA_REMOTE'].to_s.downcase.in?(['true', '1', 'yes'])
         end
 
         def verbose?
-          ENV['CAPYBARA_LOG'].to_s.downcase.in?(['true', '1', 'yes'])
+          IstanbulCupriteRails.configuration.verbose
         end
 
         def log(message)
-          puts "[CAPYBARA] #{message}" if verbose?
+          puts "[CAPYBARA] #{message}" if verbose? # rubocop:disable Rails/Output
         end
       end
     end
