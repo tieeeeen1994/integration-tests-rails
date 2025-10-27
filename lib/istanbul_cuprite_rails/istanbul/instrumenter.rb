@@ -11,14 +11,13 @@ module IstanbulCupriteRails
       class << self
         def instrument_all
           config = IstanbulCupriteRails.configuration
-          root = Rails.root
 
           # Clean output directory
-          FileUtils.rm_rf(config.output_path(root))
-          FileUtils.mkdir_p(config.output_path(root))
+          FileUtils.rm_rf(config.output_path)
+          FileUtils.mkdir_p(config.output_path)
 
           # Find all JS files
-          js_files = Dir.glob(config.source_path(root).join('**/*.js'))
+          js_files = Dir.glob(config.source_path.join('**/*.js'))
           Util.log "Instrumenting #{js_files.length} JavaScript files..."
 
           js_files.each do |file|
@@ -31,10 +30,9 @@ module IstanbulCupriteRails
 
         def instrument_file(file)
           config = IstanbulCupriteRails.configuration
-          root = Rails.root
 
-          relative_path = Pathname.new(file).relative_path_from(config.source_path(root))
-          output_file = config.output_path(root).join(relative_path)
+          relative_path = Pathname.new(file).relative_path_from(config.source_path)
+          output_file = config.output_path.join(relative_path)
 
           FileUtils.mkdir_p(output_file.dirname)
 

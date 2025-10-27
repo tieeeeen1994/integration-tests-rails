@@ -8,18 +8,15 @@ module IstanbulCupriteRails
   module Istanbul
     class << self
       def setup
-        Instrumenter.instrument_all
-        Collector.setup
+        Util.configure_rspec
       end
+    end
 
-      def collect(page)
-        Collector.collect(page)
-      end
-
-      def teardown
-        Collector.generate_report
-        Collector.restore_original_files
-      end
+    # Ensure cleanup at exit
+    at_exit do
+      Collector.restore_original_files
+    rescue StandardError => e
+      warn "Istanbul cleanup failed: #{e.message}"
     end
   end
 end

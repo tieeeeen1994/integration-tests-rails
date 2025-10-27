@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'capybara/cuprite'
 require_relative 'capybara/util'
 require_relative 'capybara/remote'
 require_relative 'capybara/local'
@@ -10,8 +11,6 @@ module IstanbulCupriteRails
       def setup
         config = IstanbulCupriteRails.configuration
 
-        require 'capybara/cuprite'
-
         ::Capybara.javascript_driver = :cuprite
 
         if config.remote
@@ -21,7 +20,7 @@ module IstanbulCupriteRails
         end
 
         Util.configure_rspec
-        Util.configure_webmock if config.webmock
+        Util.configure_webmock
       end
     end
   end

@@ -4,7 +4,6 @@ require_relative 'istanbul_cuprite_rails/version'
 require_relative 'istanbul_cuprite_rails/configuration'
 require_relative 'istanbul_cuprite_rails/istanbul'
 require_relative 'istanbul_cuprite_rails/capybara'
-require_relative 'istanbul_cuprite_rails/rspec_integration'
 
 module IstanbulCupriteRails
   class Error < StandardError; end
@@ -26,11 +25,8 @@ module IstanbulCupriteRails
     def setup
       yield(configuration) if block_given?
 
-      # Configure Capybara/Cuprite
       Capybara.setup
-
-      # Set up RSpec hooks
-      RSpecIntegration.configure_rspec
+      Istanbul.setup
     end
   end
 end

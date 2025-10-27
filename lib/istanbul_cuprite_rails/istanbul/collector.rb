@@ -11,7 +11,6 @@ module IstanbulCupriteRails
       class << self
         def setup
           config = IstanbulCupriteRails.configuration
-          root = Rails.root
 
           # Instrument files
           Instrumenter.instrument_all
@@ -20,8 +19,8 @@ module IstanbulCupriteRails
           backup_and_replace_files
 
           # Clean previous coverage data
-          FileUtils.rm_rf(config.coverage_dir(root))
-          FileUtils.mkdir_p(config.coverage_dir(root))
+          FileUtils.rm_rf(config.coverage_dir)
+          FileUtils.mkdir_p(config.coverage_dir)
         end
 
         def collect(page)
@@ -50,10 +49,9 @@ module IstanbulCupriteRails
 
         def restore_original_files
           config = IstanbulCupriteRails.configuration
-          root = Rails.root
 
-          backup_dir = config.backup_path(root)
-          source_dir = config.source_path(root)
+          backup_dir = config.backup_path
+          source_dir = config.source_path
 
           return unless Dir.exist?(backup_dir)
 
@@ -66,31 +64,28 @@ module IstanbulCupriteRails
 
         def backup_and_replace_files
           config = IstanbulCupriteRails.configuration
-          root = Rails.root
 
           # Backup originals
-          FileUtils.rm_rf(config.backup_path(root))
-          FileUtils.cp_r(config.source_path(root), config.backup_path(root))
+          FileUtils.rm_rf(config.backup_path)
+          FileUtils.cp_r(config.source_path, config.backup_path)
 
           # Replace with instrumented
-          Dir.glob(config.output_path(root).join('**/*.js')).each do |instrumented_file|
-            relative_path = Pathname.new(instrumented_file).relative_path_from(config.output_path(root))
-            target_file = config.source_path(root).join(relative_path)
+          Dir.glob(config.output_path.join('**/*.js')).each do |instrumented_file|
+            relative_path = Pathname.new(instrumented_file).relative_path_from(config.output_path)
+            target_file = config.source_path.join(relative_path)
             FileUtils.cp(instrumented_file, target_file)
           end
         end
 
         def save_coverage_snapshot(coverage_data)
           config = IstanbulCupriteRails.configuration
-          root = Rails.root
 
-          snapshot_file = config.coverage_dir(root).join("js-#{Time.now.to_f.to_s.tr('.', '-')}.json")
+          snapshot_file = config.coverage_dir.join("js-#{Time.now.to_f.to_s.tr('.', '-')}.json")
           File.write(snapshot_file, JSON.pretty_generate(coverage_data))
         end
 
         def build_report_script
           config = IstanbulCupriteRails.configuration
-          root = Rails.root
 
           <<~JS
             const libCoverage = require('istanbul-lib-coverage');
@@ -99,7 +94,7 @@ module IstanbulCupriteRails
             const fs = require('fs');
             const path = require('path');
 
-            const coverageDir = '#{config.coverage_dir(root)}';
+            const coverageDir = '#{config.coverage_dir}';
             const files = fs.readdirSync(coverageDir).filter(f => f.startsWith('js-') && f.endsWith('.json'));
 
             const coverageMap = libCoverage.createCoverageMap();
@@ -125,12 +120,12 @@ module IstanbulCupriteRails
               return fileList;
             }
 
-            const instrumentedDir = '#{config.output_path(root)}';
+            const instrumentedDir = '#{config.output_path}';
             const instrumentedFiles = findJsFiles(instrumentedDir);
 
             instrumentedFiles.forEach(instrumentedFile => {
               const relativePath = path.relative(instrumentedDir, instrumentedFile);
-              const originalFile = path.join('#{config.source_path(root)}', relativePath);
+              const originalFile = path.join('#{config.source_path}', relativePath);
 
               if (coverageMap.data[originalFile]) return;
 
