@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Capybara
     module Local
       class << self
         def setup
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           ::Capybara.default_max_wait_time = config.wait_time
           ::Capybara.server = :puma, { Silent: !Util.verbose? }
@@ -17,7 +17,7 @@ module IstanbulCupriteRails
         private
 
         def register_driver
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           ::Capybara.register_driver(:cuprite) do |app|
             options = {

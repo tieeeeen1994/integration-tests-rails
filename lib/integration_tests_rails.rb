@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative 'istanbul_cuprite_rails/version'
-require_relative 'istanbul_cuprite_rails/configuration'
-require_relative 'istanbul_cuprite_rails/istanbul'
-require_relative 'istanbul_cuprite_rails/capybara'
+require_relative 'integration_tests_rails/version'
+require_relative 'integration_tests_rails/configuration'
+require_relative 'integration_tests_rails/istanbul'
+require_relative 'integration_tests_rails/capybara'
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   class Error < StandardError; end
 
   class << self

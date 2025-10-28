@@ -4,7 +4,7 @@ require_relative 'istanbul/instrumenter'
 require_relative 'istanbul/collector'
 require_relative 'istanbul/util'
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Istanbul
     class << self
       def setup

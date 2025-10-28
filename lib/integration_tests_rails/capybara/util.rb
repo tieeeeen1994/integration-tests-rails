@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Capybara
     module Util
       class << self
@@ -12,7 +12,7 @@ module IstanbulCupriteRails
         def ensure_server_ready(context)
           return if @server_ready
 
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
           log "Waiting for server on #{::Capybara.app_host.presence || 'localhost'} to start..."
 
           config.max_server_retries.times do |attempt|
@@ -31,13 +31,13 @@ module IstanbulCupriteRails
           RSpec.configure do |config|
             config.before(:each, type: :feature) do
               ::Capybara.current_driver = ::Capybara.javascript_driver
-              IstanbulCupriteRails::Capybara::Util.ensure_server_ready(self)
+              IntegrationTestsRails::Capybara::Util.ensure_server_ready(self)
             end
           end
         end
 
         def verbose?
-          IstanbulCupriteRails.configuration.verbose
+          IntegrationTestsRails.configuration.verbose
         end
 
         def log(message)

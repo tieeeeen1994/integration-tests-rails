@@ -6,3 +6,4 @@ gemspec
 
 gem 'reek'
 gem 'rubocop-nueca'
+gem 'ruby-lsp-reek', require: false

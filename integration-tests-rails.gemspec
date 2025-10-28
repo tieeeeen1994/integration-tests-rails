@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative 'lib/istanbul_cuprite_rails/version'
+require_relative 'lib/integration_tests_rails/version'
 
 Gem::Specification.new do |spec|
-  spec.name        = 'istanbul-cuprite-rails'
-  spec.version     = IstanbulCupriteRails::VERSION
+  spec.name        = 'integration-tests-rails'
+  spec.version     = IntegrationTestsRails::VERSION
   spec.authors     = ['Tien']
   spec.email       = ['tieeeeen1994@gmail.com']
-  spec.homepage    = 'https://github.com/tieeeeen1994/istanbul-cuprite-rails'
+  spec.homepage    = 'https://github.com/tieeeeen1994/integration-tests-rails'
   spec.summary     = 'Integration Testing for Rails applications using ' \
                      'Istanbul, Cuprite, Capybara and RSpec specifically.'
   spec.license     = 'MIT'

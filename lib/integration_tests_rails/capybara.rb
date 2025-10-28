@@ -5,11 +5,11 @@ require_relative 'capybara/util'
 require_relative 'capybara/remote'
 require_relative 'capybara/local'
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Capybara
     class << self
       def setup
-        config = IstanbulCupriteRails.configuration
+        config = IntegrationTestsRails.configuration
 
         ::Capybara.javascript_driver = :cuprite
 

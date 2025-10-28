@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Istanbul
     module Util
       class << self
@@ -31,7 +31,7 @@ module IstanbulCupriteRails
         private
 
         def verbose?
-          IstanbulCupriteRails.configuration&.verbose
+          IntegrationTestsRails.configuration&.verbose
         end
       end
     end

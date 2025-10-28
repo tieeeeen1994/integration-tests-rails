@@ -5,12 +5,12 @@ require 'json'
 require 'pathname'
 require 'shellwords'
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Istanbul
     module Collector
       class << self
         def setup
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           # Instrument files
           Instrumenter.instrument_all
@@ -48,7 +48,7 @@ module IstanbulCupriteRails
         end
 
         def restore_original_files
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           backup_dir = config.backup_path
           source_dir = config.source_path
@@ -63,7 +63,7 @@ module IstanbulCupriteRails
         private
 
         def backup_and_replace_files
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           # Backup originals
           FileUtils.rm_rf(config.backup_path)
@@ -78,14 +78,14 @@ module IstanbulCupriteRails
         end
 
         def save_coverage_snapshot(coverage_data)
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           snapshot_file = config.coverage_dir.join("js-#{Time.now.to_f.to_s.tr('.', '-')}.json")
           File.write(snapshot_file, JSON.pretty_generate(coverage_data))
         end
 
         def build_report_script
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           <<~JS
             const libCoverage = require('istanbul-lib-coverage');

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Capybara
     module Remote
       class << self
         def setup
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           ::Capybara.server_host = config.server_host
           ::Capybara.server_port = config.server_port
@@ -25,7 +25,7 @@ module IstanbulCupriteRails
         private
 
         def register_driver
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           ::Capybara.register_driver(:cuprite) do |app|
             options = {

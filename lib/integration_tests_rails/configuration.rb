@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   class Configuration
     attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote, :chrome_url,
                   :verbose, :timeout, :server_host, :server_port, :puma_threads, :window_size, :max_server_retries

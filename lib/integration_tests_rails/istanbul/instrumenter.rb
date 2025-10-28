@@ -5,12 +5,12 @@ require 'json'
 require 'pathname'
 require 'shellwords'
 
-module IstanbulCupriteRails
+module IntegrationTestsRails
   module Istanbul
     module Instrumenter
       class << self
         def instrument_all
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           # Clean output directory
           FileUtils.rm_rf(config.output_path)
@@ -29,7 +29,7 @@ module IstanbulCupriteRails
         end
 
         def instrument_file(file)
-          config = IstanbulCupriteRails.configuration
+          config = IntegrationTestsRails.configuration
 
           relative_path = Pathname.new(file).relative_path_from(config.source_path)
           output_file = config.output_path.join(relative_path)
