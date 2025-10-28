@@ -6,6 +6,7 @@ require_relative 'capybara/remote'
 require_relative 'capybara/local'
 
 module IntegrationTestsRails
+  # This contains the Capybara setup and configuration.
   module Capybara
     class << self
       def setup

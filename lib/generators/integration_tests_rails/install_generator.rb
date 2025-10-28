@@ -4,6 +4,7 @@ require 'rails/generators'
 
 module IntegrationTestsRails
   module Generators
+    # Generator responsible for setting up the Rails project with necessary tools to make integration testing possible.
     class InstallGenerator < Rails::Generators::Base
       source_root File.expand_path('templates', __dir__)
 

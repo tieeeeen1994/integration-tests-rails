@@ -1,0 +1,20 @@
+---
+
+detectors:
+  Attribute:
+    exclude:
+      - IntegrationTestsRails::Configuration
+
+  LongParameterList:
+    max_params: 5
+
+  TooManyStatements:
+    max_statements: 15
+
+  TooManyInstanceVariables:
+    exclude:
+      - IntegrationTestsRails::Configuration
+
+  UncommunicativeVariableName:
+    accept:
+      - e

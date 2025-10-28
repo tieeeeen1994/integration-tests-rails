@@ -2,6 +2,7 @@
 
 module IntegrationTestsRails
   module Istanbul
+    # Utilities for Istanbul setup and configuration are found here.
     module Util
       class << self
         def configure_rspec
@@ -13,11 +14,6 @@ module IntegrationTestsRails
 
             config.after(:each, type: :feature) do
               Collector.collect(page)
-            end
-
-            config.after(:suite) do
-              Collector.generate_report
-              Collector.restore_original_files
             end
           end
         end

@@ -5,9 +5,8 @@ require_relative 'integration_tests_rails/configuration'
 require_relative 'integration_tests_rails/istanbul'
 require_relative 'integration_tests_rails/capybara'
 
+# The main module for the IntegrationTestsRails gem.
 module IntegrationTestsRails
-  class Error < StandardError; end
-
   class << self
     def configuration
       @configuration ||= Configuration.new

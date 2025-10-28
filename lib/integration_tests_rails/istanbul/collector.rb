@@ -7,6 +7,7 @@ require 'shellwords'
 
 module IntegrationTestsRails
   module Istanbul
+    # Collects reports and manages instrumented files.
     module Collector
       class << self
         def setup
@@ -19,8 +20,9 @@ module IntegrationTestsRails
           backup_and_replace_files
 
           # Clean previous coverage data
-          FileUtils.rm_rf(config.coverage_dir)
-          FileUtils.mkdir_p(config.coverage_dir)
+          coverage_dir = config.coverage_dir
+          FileUtils.rm_rf(coverage_dir)
+          FileUtils.mkdir_p(coverage_dir)
         end
 
         def collect(page)
@@ -64,15 +66,18 @@ module IntegrationTestsRails
 
         def backup_and_replace_files
           config = IntegrationTestsRails.configuration
+          source_path = config.source_path
+          backup_path = config.backup_path
+          output_path = config.output_path
 
           # Backup originals
-          FileUtils.rm_rf(config.backup_path)
-          FileUtils.cp_r(config.source_path, config.backup_path)
+          FileUtils.rm_rf(backup_path)
+          FileUtils.cp_r(source_path, backup_path)
 
           # Replace with instrumented
-          Dir.glob(config.output_path.join('**/*.js')).each do |instrumented_file|
-            relative_path = Pathname.new(instrumented_file).relative_path_from(config.output_path)
-            target_file = config.source_path.join(relative_path)
+          Dir.glob(output_path.join('**/*.js')).each do |instrumented_file|
+            relative_path = Pathname.new(instrumented_file).relative_path_from(output_path)
+            target_file = source_path.join(relative_path)
             FileUtils.cp(instrumented_file, target_file)
           end
         end

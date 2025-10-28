@@ -2,6 +2,7 @@
 
 module IntegrationTestsRails
   module Capybara
+    # Utilities for Capybara setup and configuration are found here.
     module Util
       class << self
         def configure_webmock
@@ -15,16 +16,16 @@ module IntegrationTestsRails
           config = IntegrationTestsRails.configuration
           log "Waiting for server on #{::Capybara.app_host.presence || 'localhost'} to start..."
 
-          config.max_server_retries.times do |attempt|
+          server_retries = config.max_server_retries
+          server_retries.times do |attempt|
             context.visit('/400')
             @server_ready = true
             log 'Server is ready!'
             break
           rescue StandardError
-            log "Server not ready (attempt #{attempt + 1}/#{config.max_server_retries})."
+            log "Server not ready (attempt #{attempt + 1}/#{server_retries})."
           end
-
-          log "Server did not start after #{config.max_server_retries} attempts..." unless @server_ready
+          log "Server did not start after #{server_retries} attempts..." unless @server_ready
         end
 
         def configure_rspec

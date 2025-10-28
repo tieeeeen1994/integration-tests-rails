@@ -2,6 +2,7 @@
 
 module IntegrationTestsRails
   module Capybara
+    # Configure Capybara to use local Chrome browser via Cuprite.
     module Local
       class << self
         def setup

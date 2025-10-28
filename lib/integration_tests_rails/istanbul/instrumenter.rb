@@ -7,14 +7,16 @@ require 'shellwords'
 
 module IntegrationTestsRails
   module Istanbul
+    # Instruments JavaScript files for code coverage using Istanbul.
     module Instrumenter
       class << self
         def instrument_all
           config = IntegrationTestsRails.configuration
+          output_path = config.output_path
 
           # Clean output directory
-          FileUtils.rm_rf(config.output_path)
-          FileUtils.mkdir_p(config.output_path)
+          FileUtils.rm_rf(output_path)
+          FileUtils.mkdir_p(output_path)
 
           # Find all JS files
           js_files = Dir.glob(config.source_path.join('**/*.js'))
