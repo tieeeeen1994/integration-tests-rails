@@ -93,11 +93,11 @@ class TestsController < ActionController::Base
           <meta charset="UTF-8">
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <meta name="turbo-visit-control" content="reload">
-          <%%= csrf_meta_tags %>
-          <%%= csp_meta_tag %>
-          <%%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-          <%%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
-          <%%= javascript_importmap_tags %>
+          <%= csrf_meta_tags %>
+          <%= csp_meta_tag %>
+          <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+          <%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
+          <%= javascript_importmap_tags %>
         </head>
         <body>
         </body>
@@ -117,11 +117,11 @@ Since vendored JavaScript are not included by default, additional tags may be re
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <meta name="turbo-visit-control" content="reload">
-      <%%= csrf_meta_tags %>
-      <%%= csp_meta_tag %>
-      <%%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-      <%%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
-      <%%= javascript_importmap_tags %>
+      <%= csrf_meta_tags %>
+      <%= csp_meta_tag %>
+      <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+      <%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
+      <%= javascript_importmap_tags %>
 
       <script type="module">
         import CustomCode from 'custom_code';
