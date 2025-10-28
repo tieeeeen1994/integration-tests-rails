@@ -52,6 +52,7 @@ Since test suites can vary greatly between applications, manual setup of the con
 ```ruby
 # spec/capybara_helper.rb
 
+require 'rails_helper'
 require 'integration_tests_rails'
 
 IntegrationTestsRails.setup
