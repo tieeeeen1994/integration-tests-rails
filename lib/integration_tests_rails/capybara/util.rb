@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'helpers'
+
 module IntegrationTestsRails
   module Capybara
     # Utilities for Capybara setup and configuration are found here.
@@ -34,7 +36,8 @@ module IntegrationTestsRails
               ::Capybara.current_driver = ::Capybara.javascript_driver
               IntegrationTestsRails::Capybara::Util.ensure_server_ready(self)
             end
-            setup_unit_testing(config)
+
+            config.include(Helper, type: :feature, unit: true)
           end
         end
 
@@ -44,26 +47,6 @@ module IntegrationTestsRails
 
         def log(message)
           puts "[CAPYBARA] #{message}" if verbose?
-        end
-
-        private
-
-        def setup_unit_testing(config)
-          config.let(:result, type: :feature, unit: true) do
-            case script
-            when Array
-              script.map { |cmd| page.evaluate_script(cmd) }.last
-            when String
-              page.evaluate_script(script)
-            end
-          end
-
-          config.let(:script, type: :feature, unit: true) { nil }
-
-          config.before(:each, type: :feature, unit: true) do
-            visit tests_path
-            result
-          end
         end
       end
     end
