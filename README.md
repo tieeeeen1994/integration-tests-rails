@@ -76,4 +76,129 @@ IntegrationTestsRails.setup do |config|
 end
 ```
 
-### Unit Testing JavaScript Code
+## Unit Testing JavaScript Code
+
+### Usage
+
+To unit test JavaScript code, the provided `TestsController (spec/support/features/tests_controller)` can be modified. By default, it only renders a complete HTML page that also loads importmap-supporting JavaScript code to set up the environment for testing.
+
+```ruby
+class TestsController < ActionController::Base
+  def index
+    render inline: <<~HTML.squish
+      <!DOCTYPE html>
+      <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <meta name="turbo-visit-control" content="reload">
+          <%%= csrf_meta_tags %>
+          <%%= csp_meta_tag %>
+          <%%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+          <%%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
+          <%%= javascript_importmap_tags %>
+        </head>
+        <body>
+        </body>
+      </html>
+    HTML
+  end
+end
+```
+
+Since vendored JavaScript are not included by default, additional tags may be required to load them. For example, if there exists a `custom_code.js` file in `app/javascript`:
+
+```ruby
+<<~HTML.squish
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="turbo-visit-control" content="reload">
+      <%%= csrf_meta_tags %>
+      <%%= csp_meta_tag %>
+      <%%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+      <%%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
+      <%%= javascript_importmap_tags %>
+
+      <script type="module">
+        import CustomCode from 'custom_code';
+        window.CustomCode = CustomCode;
+      </script>
+    </head>
+    <body>
+    </body>
+  </html>
+HTML
+```
+
+### Writing Tests
+
+Tests can be written using RSpec and Capybara as follows:
+
+```ruby
+require 'capybara_helper'
+
+RSpec.describe 'Custom Code Unit Test', type: :feature, unit: true do
+  describe '#doSomething' do
+    let(:script) do
+      'CustomCode.doSomething();'
+    end
+
+    it 'does something' do
+      expect(result).to eq('Did something!')
+    end
+  end
+end
+```
+
+The `script` component is the JavaScript code that will be executed for the test. The `result` component will contain the return value of the evaluated script. The `script` can accept string or heredoc formats:
+
+```ruby
+let(:script) do
+  <<~JS
+    CustomCode.doSomething();
+  JS
+end
+```
+
+Do note that **the `script` component can execute one statement only**. If multiple statements are needed, consider wrapping them in a function and invoking that function in the `script` component.
+
+```ruby
+let(:script) do
+  <<~JS
+    (() => {
+      const value1 = CustomCode.getValue1();
+      const value2 = CustomCode.getValue2();
+      return CustomCode.combineValues(value1, value2);
+    })();
+  JS
+end
+```
+
+The above will successfully execute the three statements and return the value in `result`. However, this can become a problem if the JavaScript code being tested relies on waiting for each statement to complete. In such cases, it is recommended to use an array instead in `script`:
+
+```ruby
+let(:script) do
+  [
+    <<~JS,
+      CustomCode.initialize();
+      CustomCode.doSomething();
+    JS
+    'CustomCode.openModal()',
+    'CustomCode.closeModal()'
+  ]
+end
+```
+
+In such cases where `script` is an array, the `result` component will contain the return value of the **last statement only**.
+
+
+## Integration Testing
+
+Refer to [Cuprite](https://github.com/rubycdp/cuprite) and [Capybara](https://github.com/teamcapybara/capybara). Use them as normally in integration tests.
+
+## JavaScript Coverage Reports
+
+After the tests (successful, failed or cancelled), coverage reports will be generated in `coverage/javascript` by default.

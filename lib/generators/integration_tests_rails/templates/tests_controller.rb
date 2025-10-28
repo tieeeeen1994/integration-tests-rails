@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# Controller for Istanbul Cuprite Rails JavaScript testing
 # This provides a minimal page that loads your JavaScript
 class TestsController < ActionController::Base
   def index
