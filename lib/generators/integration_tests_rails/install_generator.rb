@@ -8,7 +8,7 @@ module IntegrationTestsRails
     class InstallGenerator < Rails::Generators::Base
       source_root File.expand_path('templates', __dir__)
 
-      desc 'Install Istanbul + Cuprite + Rails Setup'
+      desc 'Initialize project for integration testing.'
 
       def install_node_dependencies
         unless system('which yarn > /dev/null 2>&1')
