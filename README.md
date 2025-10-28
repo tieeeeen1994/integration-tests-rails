@@ -63,19 +63,17 @@ The `IntegrationTestsRails.setup` method accepts an optional block for further c
 
 ```ruby
 IntegrationTestsRails.setup do |config|
-  config.backup_dir = 'tmp/js_backup' # Directory to store the original JavaScript files.
   config.chrome_url = nil # Used for remote Chrome instances. Needs remote to be true.
-  config.coverage_path = 'coverage/nyc' # Directory to store coverage reports.
   config.max_server_retries = 1000 # Before running the tests, Cuprite starts a server to communicate with Chrome. This sets the maximum number of retries to connect to that server.
-  config.output_dir = 'tmp/instrumented_js' # Directory to store instrumented JavaScript files.
   config.puma_threads = '1:1' # Number of threads for the Puma server used by Cuprite.
   config.remote = false # Whether to use a remote Chrome instance.
   config.server_host = '0.0.0.0' # Host for the Puma server used by Cuprite.
   config.server_port = nil # Port for the Puma server used by Cuprite.
   config.source_dir = 'app/javascript' # Directory containing the JavaScript files to be instrumented.
-  config.timeout = 30 # Timeout in seconds for processing requests to the Puma server.
   config.verbose = false # Whether to enable verbose logging.
   config.wait_time = 5 # Max time in seconds to wait after each request by Capybara to load content.
   config.window_size = [1920, 1080] # Size of the browser window used by Cuprite.
 end
 ```
+
+### Unit Testing JavaScript Code
