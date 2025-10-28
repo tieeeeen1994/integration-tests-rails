@@ -28,6 +28,23 @@ module IntegrationTestsRails
       def add_route
         route 'resources(:tests, only: :index) if Rails.env.test?'
       end
+
+      def update_gitignore
+        gitignore_path = '.gitignore'
+        lines_to_add = ['node_modules/', 'coverage/']
+
+        return unless File.exist?(gitignore_path)
+
+        content = File.read(gitignore_path)
+        lines_to_add.each do |line|
+          if content.include?(line)
+            say "'#{line}' already exists in .gitignore", :blue
+          else
+            append_to_file gitignore_path, "\n#{line}\n"
+            say "Added '#{line}' to .gitignore", :green
+          end
+        end
+      end
     end
   end
 end
