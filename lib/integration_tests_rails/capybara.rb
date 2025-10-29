@@ -4,6 +4,7 @@ require 'capybara/cuprite'
 require_relative 'capybara/util'
 require_relative 'capybara/remote'
 require_relative 'capybara/local'
+require_relative 'capybara/tests_controller'
 
 module IntegrationTestsRails
   # This contains the Capybara setup and configuration.

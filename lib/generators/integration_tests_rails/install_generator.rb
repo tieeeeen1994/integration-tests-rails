@@ -21,10 +21,6 @@ module IntegrationTestsRails
         run 'yarn install'
       end
 
-      def copy_tests_controller
-        template 'tests_controller.rb', 'spec/support/features/tests_controller.rb'
-      end
-
       def update_gitignore
         gitignore_path = '.gitignore'
         lines_to_add = ['node_modules/', 'coverage/']
