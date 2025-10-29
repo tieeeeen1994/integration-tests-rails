@@ -41,6 +41,12 @@ module IntegrationTestsRails
           end
         end
 
+        def configure_routes
+          Rails.application.routes.draw do
+            resources :tests, only: :index
+          end
+        end
+
         def verbose?
           IntegrationTestsRails.configuration.verbose
         end

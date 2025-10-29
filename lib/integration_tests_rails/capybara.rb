@@ -22,6 +22,7 @@ module IntegrationTestsRails
 
         Util.configure_rspec
         Util.configure_webmock
+        Util.configure_routes
       end
     end
   end

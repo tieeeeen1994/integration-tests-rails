@@ -25,10 +25,6 @@ module IntegrationTestsRails
         template 'tests_controller.rb', 'spec/support/features/tests_controller.rb'
       end
 
-      def add_route
-        route 'resources(:tests, only: :index) if Rails.env.test?'
-      end
-
       def update_gitignore
         gitignore_path = '.gitignore'
         lines_to_add = ['node_modules/', 'coverage/']
