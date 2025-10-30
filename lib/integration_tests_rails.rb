@@ -3,7 +3,7 @@
 require_relative 'integration_tests_rails/version'
 require_relative 'integration_tests_rails/railtie'
 
-return unless Rails.env.test? && defined?(RSpec) && defined?(Capybara) && defined?(Cuprite)
+return unless defined?(RSpec) && defined?(Capybara) && defined?(Cuprite)
 
 require_relative 'integration_tests_rails/configuration'
 require_relative 'integration_tests_rails/istanbul'
