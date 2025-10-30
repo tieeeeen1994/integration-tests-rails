@@ -8,7 +8,6 @@ module IntegrationTestsRails
         def configure_rspec
           RSpec.configure do |config|
             config.before(:suite) do
-              Instrumenter.instrument_all
               Collector.setup
             end
 
