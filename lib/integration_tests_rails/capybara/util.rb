@@ -42,7 +42,7 @@ module IntegrationTestsRails
         end
 
         def configure_routes
-          Rails.application.routes.draw do
+          Rails.application.routes.append do
             resources :tests, only: :index
           end
         end

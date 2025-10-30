@@ -19,7 +19,7 @@ module IntegrationTestsRails
 
           puts 'Updating .gitignore...'
           gitignore_path = '.gitignore'
-          lines_to_add = ['node_modules/', 'coverage/']
+          lines_to_add = ['node_modules/', 'coverage/', 'tmp/instrumented_js/', 'tmp/js_backup/']
 
           if File.exist?(gitignore_path)
             content = File.read(gitignore_path)
