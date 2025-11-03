@@ -37,7 +37,7 @@ jobs:
     - name: Check if tag exists
       id: tag_check
       run: |
-        if git ls-remote --tags origin | grep -q "refs/tags/v${{ steps.gem_version.outputs.version }}"; then
+        if git ls-remote --tags origin | grep -q "refs/tags/${{ steps.gem_version.outputs.version }}"; then
           echo "exists=true" >> $GITHUB_OUTPUT
         else
           echo "exists=false" >> $GITHUB_OUTPUT
@@ -63,8 +63,8 @@ jobs:
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git tag -a "v${{ steps.gem_version.outputs.version }}" -m "Release version ${{ steps.gem_version.outputs.version }}"
-        git push origin "v${{ steps.gem_version.outputs.version }}"
+        git tag -a "${{ steps.gem_version.outputs.version }}" -m "Release version ${{ steps.gem_version.outputs.version }}"
+        git push origin "${{ steps.gem_version.outputs.version }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -74,8 +74,8 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: v${{ steps.gem_version.outputs.version }}
-        release_name: Release v${{ steps.gem_version.outputs.version }}
+        tag_name: ${{ steps.gem_version.outputs.version }}
+        release_name: Release ${{ steps.gem_version.outputs.version }}
         draft: false
         prerelease: false
 
@@ -85,4 +85,4 @@ jobs:
 
     - name: Skip creating tag/release
       if: steps.tag_check.outputs.exists == 'true'
-      run: echo "Tag v${{ steps.gem_version.outputs.version }} already exists. Skipping tag and release creation."
+      run: echo "Tag ${{ steps.gem_version.outputs.version }} already exists. Skipping tag and release creation."
