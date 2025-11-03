@@ -42,6 +42,7 @@ module IntegrationTestsRails
         end
 
         def configure_routes
+          puts '================== ROUTES ADDED =================='
           Rails.application.routes.append do
             resources :tests, only: :index
           end
