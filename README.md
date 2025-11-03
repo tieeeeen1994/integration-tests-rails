@@ -19,7 +19,7 @@ Add this line to your Rails application's Gemfile:
 
 ```ruby
 group :development, :test do
-  gem 'integration_tests_rails', require: false
+  gem 'integration_tests_rails'
 end
 ```
 
@@ -34,16 +34,14 @@ bundle install
 After installation, run:
 
 ```sh
-rails generate integration_tests_rails:install
+rails integration_tests_rails:install
 ```
 
 If you do not have `Yarn` installed, the above command will prompt you to install it. Follow the instructions to complete the installation. Re-run the command after installing `Yarn`.
 
 The generator will do the following:
 - Install Instanbul using Yarn.
-- Create a controller that can be used to *unit test JavaScript code*.
-- Add a line in `routes.rb` to route requests to the above controller.
-- Add an entry in `.gitignore` to ignore coverage reports and locally installed Istanbul packages.
+- Add entries in `.gitignore` to ignore coverage reports and locally installed Istanbul packages.
 
 ### Configuration
 
@@ -56,8 +54,6 @@ require 'rails_helper'
 require 'integration_tests_rails'
 
 IntegrationTestsRails.setup
-
-require_relative 'features/tests_controller' # Loads the controller for unit testing JavaScript.
 ```
 
 The `IntegrationTestsRails.setup` method accepts an optional block for further customization. Below is an example how to use and contains the default values:
@@ -71,6 +67,7 @@ IntegrationTestsRails.setup do |config|
   config.server_host = '0.0.0.0' # Host for the Puma server used by Cuprite.
   config.server_port = nil # Port for the Puma server used by Cuprite.
   config.source_dir = 'app/javascript' # Directory containing the JavaScript files to be instrumented.
+  config.tests_page_html = DEFAULT_HTML_CONTENT # HTML content used for the test page. More details below.
   config.verbose = false # Whether to enable verbose logging.
   config.wait_time = 5 # Max time in seconds to wait after each request by Capybara to load content.
   config.window_size = [1920, 1080] # Size of the browser window used by Cuprite.
@@ -81,33 +78,29 @@ end
 
 ### Usage
 
-To unit test JavaScript code, the provided `TestsController (spec/support/features/tests_controller)` can be modified. By default, it only renders a complete HTML page that also loads importmap-supporting JavaScript code to set up the environment for testing.
+To unit test JavaScript code, the gem will visit a test HTML page. By default, it only renders a complete HTML page that also loads importmap-supporting JavaScript code to set up the environment for testing.
 
 ```ruby
-class TestsController < ActionController::Base
-  def index
-    render inline: <<~HTML.squish
-      <!DOCTYPE html>
-      <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <meta name="turbo-visit-control" content="reload">
-          <%= csrf_meta_tags %>
-          <%= csp_meta_tag %>
-          <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-          <%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
-          <%= javascript_importmap_tags %>
-        </head>
-        <body>
-        </body>
-      </html>
-    HTML
-  end
-end
+DEFAULT_HTML_CONTENT = <<~HTML.squish
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="turbo-visit-control" content="reload">
+      <%= csrf_meta_tags %>
+      <%= csp_meta_tag %>
+      <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+      <%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
+      <%= javascript_importmap_tags %>
+    </head>
+    <body>
+    </body>
+  </html>
+HTML
 ```
 
-Since vendored JavaScript are not included by default, additional tags may be required to load them. For example, if there exists a `custom_code.js` file in `app/javascript`:
+Since vendored JavaScript are not included by default, additional tags may be required to load them. For example, if there exists a `custom_code.js` file in `app/javascript` and `vendor.min.js` file in `app/assets/javascripts/plugins`:
 
 ```ruby
 <<~HTML.squish
@@ -129,6 +122,7 @@ Since vendored JavaScript are not included by default, additional tags may be re
       </script>
     </head>
     <body>
+      <%= javascript_include_tag 'plugins/vendor.min' %>
     </body>
   </html>
 HTML

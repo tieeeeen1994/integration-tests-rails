@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'integration_tests_rails/version'
-require_relative 'integration_tests_rails/railtie'
 require_relative 'integration_tests_rails/configuration'
 require_relative 'integration_tests_rails/istanbul'
 require_relative 'integration_tests_rails/capybara'
@@ -11,10 +9,6 @@ module IntegrationTestsRails
   class << self
     def configuration
       @configuration ||= Configuration.new
-    end
-
-    def configure
-      yield(configuration)
     end
 
     def reset_configuration!

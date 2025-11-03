@@ -3,3 +3,7 @@ plugins:
 
 Rails:
   Enabled: false
+
+Naming/FileName:
+  Exclude:
+    - 'lib/integration-tests-rails.rb'
