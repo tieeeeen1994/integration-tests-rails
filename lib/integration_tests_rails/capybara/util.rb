@@ -42,10 +42,12 @@ module IntegrationTestsRails
         end
 
         def configure_routes
-          puts '================== ROUTES ADDED =================='
-          Rails.application.routes.append do
+          app = Rails.application
+          app.routes.append do
             resources :tests, only: :index
           end
+          app.routes_reloader.reload!
+          log 'Routes appended and reloaded.'
         end
 
         def verbose?
