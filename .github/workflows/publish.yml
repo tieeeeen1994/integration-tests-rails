@@ -26,7 +26,7 @@ jobs:
         echo "version=$VERSION" >> $GITHUB_OUTPUT
 
     - name: Check if version exists on RubyGems
-      id: version_check
+      id: rubygems_check
       run: |
         if gem list -r integration-tests-rails | grep -q "${{ steps.gem_version.outputs.version }}"; then
           echo "exists=true" >> $GITHUB_OUTPUT
@@ -34,12 +34,21 @@ jobs:
           echo "exists=false" >> $GITHUB_OUTPUT
         fi
 
+    - name: Check if tag exists
+      id: tag_check
+      run: |
+        if git ls-remote --tags origin | grep -q "refs/tags/v${{ steps.gem_version.outputs.version }}"; then
+          echo "exists=true" >> $GITHUB_OUTPUT
+        else
+          echo "exists=false" >> $GITHUB_OUTPUT
+        fi
+
     - name: Build gem
-      if: steps.version_check.outputs.exists == 'false'
+      if: steps.rubygems_check.outputs.exists == 'false'
       run: gem build *.gemspec
 
     - name: Publish to RubyGems
-      if: steps.version_check.outputs.exists == 'false'
+      if: steps.rubygems_check.outputs.exists == 'false'
       run: |
         mkdir -p $HOME/.gem
         touch $HOME/.gem/credentials
@@ -50,7 +59,7 @@ jobs:
         GEM_HOST_API_KEY: ${{ secrets.RUBYGEMS_AUTH_TOKEN }}
 
     - name: Create Git tag and release
-      if: steps.version_check.outputs.exists == 'false'
+      if: steps.tag_check.outputs.exists == 'false'
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -60,7 +69,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Create GitHub Release
-      if: steps.version_check.outputs.exists == 'false'
+      if: steps.tag_check.outputs.exists == 'false'
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,6 +79,10 @@ jobs:
         draft: false
         prerelease: false
 
-    - name: Skip publishing
-      if: steps.version_check.outputs.exists == 'true'
+    - name: Skip publishing to RubyGems
+      if: steps.rubygems_check.outputs.exists == 'true'
       run: echo "Version ${{ steps.gem_version.outputs.version }} already exists on RubyGems. Skipping publish."
+
+    - name: Skip creating tag/release
+      if: steps.tag_check.outputs.exists == 'true'
+      run: echo "Tag v${{ steps.gem_version.outputs.version }} already exists. Skipping tag and release creation."
