@@ -198,6 +198,47 @@ Refer to [Cuprite](https://github.com/rubycdp/cuprite) and [Capybara](https://gi
 
 After the tests (successful, failed or cancelled), coverage reports will be generated in `coverage/javascript` by default.
 
+## Example Setups
+
+### Using Docker Desktop
+
+If you want to use the [Alpine Chrome](https://hub.docker.com/r/zenika/alpine-chrome) image, this is definitely possible.
+
+Open Docker Desktop, Settings, Resources then Network. Check the Enable host networking option then Apply.
+
+Your docker compose file may contain this entry:
+
+```yaml
+# compose.yml
+
+services:
+  chrome:
+    image: zenika/alpine-chrome:latest
+    network_mode: host
+    command: >
+      --no-sandbox
+      --disable-dev-shm-usage
+      --disable-gpu
+      --disable-web-security
+      --remote-debugging-address=0.0.0.0
+      --remote-debugging-port=9222
+      --headless
+    shm_size: 2gb
+```
+
+Setting up the gem:
+
+```ruby
+# capybara_helper.rb
+
+IntegrationTestsRails.setup do |config|
+  config.chrome_url = 'ws://localhost:9222'
+  config.remote = true
+  config.server_host = '0.0.0.0'
+  config.server_port = 9888
+end
+```
+
 ## Contributing
 
 1. Fork the repository.
