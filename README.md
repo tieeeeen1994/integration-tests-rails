@@ -90,8 +90,6 @@ DEFAULT_HTML_CONTENT = <<~HTML.squish
       <meta name="turbo-visit-control" content="reload">
       <%= csrf_meta_tags %>
       <%= csp_meta_tag %>
-      <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-      <%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
       <%= javascript_importmap_tags %>
     </head>
     <body>
@@ -100,7 +98,11 @@ DEFAULT_HTML_CONTENT = <<~HTML.squish
 HTML
 ```
 
-Since vendored JavaScript are not included by default, additional tags may be required to load them. For example, if there exists a `custom_code.js` file in `app/javascript` and `vendor.min.js` file in `app/assets/javascripts/plugins`:
+Since vendored JavaScript are not included by default, additional tags may be required to load them. Stylesheets can also be loaded if needed. For example, files can be included as follows:
+  - `custom_code.js` file in `app/javascript`
+  - `vendor.min.js` file in `app/assets/javascripts/plugins`
+  - `app.css` file in `app/assets/stylesheets`
+  - `custom.css` file in `app/assets/stylesheets`
 
 ```ruby
 <<~HTML.squish
@@ -112,8 +114,10 @@ Since vendored JavaScript are not included by default, additional tags may be re
       <meta name="turbo-visit-control" content="reload">
       <%= csrf_meta_tags %>
       <%= csp_meta_tag %>
+
       <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
       <%= stylesheet_link_tag 'custom', "data-turbo-track": "reload" %>
+
       <%= javascript_importmap_tags %>
 
       <script type="module">
