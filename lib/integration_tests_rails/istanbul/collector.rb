@@ -126,11 +126,13 @@ module IntegrationTestsRails
             }
 
             const instrumentedDir = '#{config.output_path}';
+            const backupDir = '#{config.backup_path}';
+            const sourceDir = '#{config.source_path}';
             const instrumentedFiles = findJsFiles(instrumentedDir);
 
             instrumentedFiles.forEach(instrumentedFile => {
               const relativePath = path.relative(instrumentedDir, instrumentedFile);
-              const originalFile = path.join('#{config.source_path}', relativePath);
+              const originalFile = path.join(sourceDir, relativePath);
 
               if (coverageMap.data[originalFile]) return;
 
@@ -140,6 +142,7 @@ module IntegrationTestsRails
 
                 if (match && match[1]) {
                   const coverageData = eval('(' + match[1] + ')');
+                  // Keep original path for display
                   coverageData.path = originalFile;
                   coverageMap.addFileCoverage(coverageData);
                 }
@@ -150,7 +153,21 @@ module IntegrationTestsRails
 
             const context = libReport.createContext({
               dir: 'coverage/javascript',
-              coverageMap: coverageMap
+              coverageMap: coverageMap,
+              sourceFinder: function(filePath) {
+                const relativePath = path.relative(sourceDir, filePath);
+                const backupFile = path.join(backupDir, relativePath);
+
+                try {
+                  // Read content from backup (original source)
+                  if (fs.existsSync(backupFile)) {
+                    return fs.readFileSync(backupFile, 'utf8');
+                  }
+                } catch(e) {
+                  console.error('Could not read backup file:', backupFile, e.message);
+                }
+                return null;
+              }
             });
 
             ['html', 'lcov', 'cobertura'].forEach(reportType => {
