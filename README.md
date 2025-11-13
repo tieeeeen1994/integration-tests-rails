@@ -176,6 +176,18 @@ let(:script) do
 end
 ```
 
+There is a `function` component that is the same as the `script` component but `function` automatically wraps the containing JavaScript code in an arrow function and executes it. The above can be rewritten as:
+
+```ruby
+let(:function) do
+  <<~JS
+    const value1 = CustomCode.getValue1();
+    const value2 = CustomCode.getValue2();
+    return CustomCode.combineValues(value1, value2);
+  JS
+end
+```
+
 The above will successfully execute the three statements and return the value in `result`. However, this can become a problem if the JavaScript code being tested relies on waiting for each statement to complete. In such cases, it is recommended to use an array instead in `script`:
 
 ```ruby
@@ -191,8 +203,9 @@ let(:script) do
 end
 ```
 
-In such cases where `script` is an array, the `result` component will contain the return value of the **last statement only**.
+In such cases where `script` is an array, the `result` component will contain the return value of the **last statement only**. `function` also supports arrays; each element will be wrapped in an arrow function and executed sequentially.
 
+**Do not use `script` and `function` components as the same time in an example.**
 
 ## Integration Testing
 

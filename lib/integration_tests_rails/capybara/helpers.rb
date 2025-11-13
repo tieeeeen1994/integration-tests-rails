@@ -15,7 +15,26 @@ module IntegrationTestsRails
         end
       end
 
-      let(:script) { nil }
+      let(:script) do
+        case function
+        when Array
+          function.map! do |fn|
+            <<~JSCODE
+              (() => {
+                #{fn}
+              })();
+            JSCODE
+          end
+        when String
+          <<~JSCODE
+            (() => {
+              #{function}
+            })();
+          JSCODE
+        end
+      end
+
+      let(:function) { nil }
 
       before do
         visit tests_path
