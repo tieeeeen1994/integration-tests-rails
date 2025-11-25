@@ -43,11 +43,12 @@ module IntegrationTestsRails
 
         def configure_routes
           app = Rails.application
-          app.routes.append do
+          routes = app.routes
+          routes.append do
             resources :tests, only: :index
           end
-          app.routes_reloader.reload!
-          log 'Routes appended and reloaded.'
+          routes.finalize!
+          log 'Routes appended and finalized.'
         end
 
         def verbose?
