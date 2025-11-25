@@ -37,7 +37,7 @@ module IntegrationTestsRails
       let(:function) { nil }
 
       before do
-        visit tests_path
+        visit '/tests'
         result
       end
     end
