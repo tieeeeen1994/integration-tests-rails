@@ -32,27 +32,45 @@ module IntegrationTestsRails
 
         def instrument_file(file)
           config = IntegrationTestsRails.configuration
-
           relative_path = Pathname.new(file).relative_path_from(config.source_path)
           output_file = config.output_path.join(relative_path)
 
           FileUtils.mkdir_p(output_file.dirname)
 
-          # Use Node.js to instrument the file
           code = File.read(file)
-          escaped_code = JSON.generate(code)
+          instrumented = instrument_code_with_istanbul(code, file)
+
+          write_instrumented_file(output_file, instrumented, relative_path)
+        end
+
+        private
+
+        def instrument_code_with_istanbul(code, file)
+          require 'tempfile'
+          Tempfile.create(['code', '.js']) do |temp_code|
+            temp_code.write(code)
+            temp_code.flush
+
+            js_command = build_istanbul_command(temp_code.path, file)
+            `node -e #{Shellwords.escape(js_command)}`.strip
+          end
+        end
+
+        def build_istanbul_command(code_path, file)
+          escaped_code_path = JSON.generate(code_path)
           escaped_file = JSON.generate(file.to_s)
 
-          js_command = <<~JS
+          <<~JS
+            const fs = require('fs');
             const { createInstrumenter } = require('istanbul-lib-instrument');
             const instrumenter = createInstrumenter({ esModules: true, compact: false });
-            const code = #{escaped_code};
+            const code = fs.readFileSync(#{escaped_code_path}, 'utf8');
             const filename = #{escaped_file};
             console.log(instrumenter.instrumentSync(code, filename));
           JS
+        end
 
-          instrumented = `node -e #{Shellwords.escape(js_command)}`.strip
-
+        def write_instrumented_file(output_file, instrumented, relative_path)
           if $CHILD_STATUS.success?
             File.write(output_file, instrumented)
           else
