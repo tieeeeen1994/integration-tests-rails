@@ -49,9 +49,9 @@ module IntegrationTestsRails
           routes.append do
             get '/tests', to: 'tests#index', as: :tests
           end
-          # In Rails 8, routes are lazily finalized, so we need to force it
-          routes.eager_load!
-          log 'Routes appended and reloaded.'
+          routes.instance_variable_set(:@finalized, false)
+          routes.finalize!
+          log 'Routes appended.'
         end
 
         def verbose?
