@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'helpers'
+require_relative 'tests_controller'
 
 module IntegrationTestsRails
   module Capybara
@@ -44,11 +45,13 @@ module IntegrationTestsRails
         def configure_routes
           app = Rails.application
           routes = app.routes
+          # Use append and let Rails handle finalization automatically
           routes.append do
-            resources :tests, only: :index
+            get '/tests', to: 'tests#index', as: :tests
           end
-          routes.finalize!
-          log 'Routes appended and finalized.'
+          # In Rails 8, routes are lazily finalized, so we need to force it
+          routes.eager_load!
+          log 'Routes appended and reloaded.'
         end
 
         def verbose?
