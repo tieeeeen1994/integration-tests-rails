@@ -16,12 +16,15 @@ module IntegrationTestsRails
         def ensure_server_ready(context)
           return if @server_ready
 
-          config = IntegrationTestsRails.configuration
           log "Waiting for server on #{::Capybara.app_host.presence || 'localhost'} to start..."
-
-          server_retries = config.max_server_retries
+          configuration = IntegrationTestsRails.configuration
+          server_retries = configuration.max_server_retries
           server_retries.times do |attempt|
-            context.visit('/400')
+            if configuration.experimental_features
+              context.visit('/tests')
+            else
+              context.visit('/')
+            end
             @server_ready = true
             log 'Server is ready!'
             break
@@ -38,11 +41,15 @@ module IntegrationTestsRails
               IntegrationTestsRails::Capybara::Util.ensure_server_ready(self)
             end
 
-            config.include(Helper, type: :feature, unit: true)
+            if IntegrationTestsRails.configuration.experimental_features
+              config.include(Helper, type: :feature, unit: true)
+            end
           end
         end
 
         def configure_routes
+          return unless IntegrationTestsRails.configuration.experimental_features
+
           app = Rails.application
           routes = app.routes
           # Use append and let Rails handle finalization automatically

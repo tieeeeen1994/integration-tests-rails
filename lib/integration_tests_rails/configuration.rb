@@ -39,12 +39,13 @@ module IntegrationTestsRails
 
     attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote,
                   :chrome_url, :tests_page_html, :window_size, :max_server_retries,
-                  :verbose, :timeout, :server_host, :server_port, :puma_threads
+                  :verbose, :timeout, :server_host, :server_port, :puma_threads, :experimental_features
 
     def initialize
       @backup_dir = 'tmp/js_backup'
       @chrome_url = nil
       @coverage_path = 'coverage/nyc'
+      @experimental_features = false
       @max_server_retries = 1000
       @output_dir = 'tmp/instrumented_js'
       @puma_threads = '1:1'

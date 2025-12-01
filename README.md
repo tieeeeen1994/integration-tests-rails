@@ -13,6 +13,8 @@ This gem is designed to facilitate integration testing in Ruby on Rails applicat
 
 ## Getting Started
 
+Gem is easy to setup.
+
 ### Installation
 
 Add this line to your Rails application's Gemfile:
@@ -75,6 +77,14 @@ end
 ```
 
 ## Unit Testing JavaScript Code
+
+This feature is **EXPERIMENTAL** and may change in future releases. It allows you to write unit tests for JavaScript code using RSpec and Capybara. To enable the feature, one must set the `experimental_features` configuration option to `true`:
+
+```ruby
+IntegrationTestsRails.setup do |config|
+  config.experimental_features = true
+end
+```
 
 ### Usage
 
@@ -216,6 +226,8 @@ Refer to [Cuprite](https://github.com/rubycdp/cuprite) and [Capybara](https://gi
 After the tests (successful, failed or cancelled), coverage reports will be generated in `coverage/javascript` by default.
 
 ## Example Setups
+
+The following are working examples.
 
 ### Using Docker Desktop
 

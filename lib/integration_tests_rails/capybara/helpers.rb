@@ -37,6 +37,7 @@ module IntegrationTestsRails
       let(:function) { nil }
 
       before do
+        # page.driver.wait_for_network_idle(timeout: IntegrationTestsRails.configuration.timeout)
         visit '/tests'
         result
       end
