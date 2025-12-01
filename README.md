@@ -268,6 +268,11 @@ IntegrationTestsRails.setup do |config|
 end
 ```
 
+## TODO
+
+1. JavaScript unit testing needs to have a way to define the JavaScript loader in the spec file itself instead of in `IntegrationTestsRails.configuration.tests_page_html`.
+2. There is no graceful way to stop failing CDNs from being retried. Find a way to wait for them to complete loading. It should respect the `IntegrationTestsRails.configuration.timeout` setting.
+
 ## Contributing
 
 1. Fork the repository.
