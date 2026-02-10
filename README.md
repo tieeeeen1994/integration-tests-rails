@@ -67,6 +67,7 @@ IntegrationTestsRails.setup do |config|
   config.puma_threads = '1:1' # Number of threads for the Puma server used by Cuprite.
   config.remote = false # Whether to use a remote Chrome instance.
   config.retry_attempts = 1 # Number of times to retry a test if an example fails inside a retry_on_fail block.
+  config.retry_capture_exceptions = [RSpec::Expectations::ExpectationNotMetError, Capybara::ElementNotFound] # Exceptions to capture when retrying inside a retry_on_fail block.
   config.retry_sleep_duration = 0 # Number of seconds to wait between retries inside a retry_on_fail block.
   config.server_host = '0.0.0.0' # Host for the Puma server used by Cuprite.
   config.server_port = nil # Port for the Puma server used by Cuprite.
@@ -243,10 +244,10 @@ RSpec.describe 'Flaky Test', type: :feature do
 end
 ```
 
-The above will retry the test if the browser was not able to find the checkbox or the page was not able to find the animated element. The number of retries and sleep duration between retries can be configured through `retry_attempts` and `retry_sleep_duration` configuration options respectively. The default number of retries is 1 and the default sleep duration is 0 seconds. You can also pass them as arguments:
+The above will retry the test if the browser was not able to find the checkbox or the page was not able to find the animated element. The number of retries, exceptions to capture and sleep duration between retries can be configured through `retry_attempts`, `retry_capture_exceptions` and `retry_sleep_duration` configuration options respectively. The default number of retries is 1 and the default sleep duration is 0 seconds. The default exceptions to capture are `RSpec::Expectations::ExpectationNotMetError` and `Capybara::ElementNotFound`. You can also pass them as arguments:
 
 ```ruby
-retry_on_fail(retry_attempts: 3, retry_sleep_duration: 1) do
+retry_on_fail(retry_attempts: 3, retry_sleep_duration: 1, capture_exceptions: [StandardError]) do
   expect(page).to have_css('div#animated-element', visible: :visible, wait: 5)
 end
 ```

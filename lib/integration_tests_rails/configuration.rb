@@ -40,7 +40,7 @@ module IntegrationTestsRails
     attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote,
                   :chrome_url, :tests_page_html, :window_size, :max_server_retries,
                   :verbose, :timeout, :server_host, :server_port, :puma_threads, :experimental_features,
-                  :retry_attempts, :retry_sleep_duration
+                  :retry_attempts, :retry_sleep_duration, :retry_capture_exceptions
 
     def initialize
       @backup_dir = 'tmp/js_backup'
@@ -52,6 +52,7 @@ module IntegrationTestsRails
       @puma_threads = '1:1'
       @remote = false
       @retry_attempts = 1
+      @retry_capture_exceptions = [RSpec::Expectations::ExpectationNotMetError, Capybara::ElementNotFound]
       @retry_sleep_duration = 0
       @server_host = '0.0.0.0' # rubocop:disable Style/IpAddresses
       @server_port = nil

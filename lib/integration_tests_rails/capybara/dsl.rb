@@ -4,15 +4,16 @@ module IntegrationTestsRails
   module Capybara
     # This module provides the main DSL for writing integration tests with Capybara.
     module Dsl
-      def retry_on_fail(attempts: nil, sleep_duration: nil)
+      def retry_on_fail(attempts: nil, sleep_duration: nil, capture_exceptions: nil)
         config = IntegrationTestsRails.configuration
         attempts ||= config.retry_attempts
         sleep_duration ||= config.retry_sleep_duration
+        capture_exceptions ||= config.retry_capture_exceptions
         counter = 0
 
         begin
           yield
-        rescue RSpec::Expectations::ExpectationNotMetError, Capybara::ElementNotFound => e
+        rescue *capture_exceptions => e
           counter += 1
           Util.log("Attempt #{counter} for #{RSpec.current_example.full_description} failed!")
           raise e if counter > attempts

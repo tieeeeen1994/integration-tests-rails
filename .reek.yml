@@ -5,6 +5,10 @@ detectors:
     exclude:
       - IntegrationTestsRails::Configuration
 
+  FeatureEnvy:
+    exclude:
+      - IntegrationTestsRails::Capybara::Dsl#retry_on_fail
+
   LongParameterList:
     max_params: 5
 
