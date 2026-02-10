@@ -66,6 +66,8 @@ IntegrationTestsRails.setup do |config|
   config.max_server_retries = 1000 # Before running the tests, Cuprite starts a server to communicate with Chrome. This sets the maximum number of retries to connect to that server.
   config.puma_threads = '1:1' # Number of threads for the Puma server used by Cuprite.
   config.remote = false # Whether to use a remote Chrome instance.
+  config.retry_attempts = 1 # Number of times to retry a test if an example fails inside a retry_on_fail block.
+  config.retry_sleep_duration = 0 # Number of seconds to wait between retries inside a retry_on_fail block.
   config.server_host = '0.0.0.0' # Host for the Puma server used by Cuprite.
   config.server_port = nil # Port for the Puma server used by Cuprite.
   config.source_dir = 'app/javascript' # Directory containing the JavaScript files to be instrumented.
@@ -220,6 +222,34 @@ In such cases where `script` is an array, the `result` component will contain th
 ## Integration Testing
 
 Refer to [Cuprite](https://github.com/rubycdp/cuprite) and [Capybara](https://github.com/teamcapybara/capybara). Use them as normally in integration tests.
+
+## Retrying Flaky Tests
+
+In practice, this is frowned upon. However, in such cases where there exists a flaky test (e.g. network issues, timing issues, third-party services respnsiveness, etc.), the gem provides a way to retry tests through `retry_on_fail`.
+
+```ruby
+RSpec.describe 'Flaky Test', type: :feature do
+  describe 'Flaky Behavior' do
+    it 'must succeed' do
+      visit '/form_with_complex_javascript'
+      retry_on_fail do
+        check 'Checkbox that executes scripts with animations'
+        expect(page).to have_css('div#animated-element', visible: :visible, wait: 5)
+      end
+
+      expect(page).to have_content('Complex Modal Opened')
+    end
+  end
+end
+```
+
+The above will retry the test if the browser was not able to find the checkbox or the page was not able to find the animated element. The number of retries and sleep duration between retries can be configured through `retry_attempts` and `retry_sleep_duration` configuration options respectively. The default number of retries is 1 and the default sleep duration is 0 seconds. You can also pass them as arguments:
+
+```ruby
+retry_on_fail(retry_attempts: 3, retry_sleep_duration: 1) do
+  expect(page).to have_css('div#animated-element', visible: :visible, wait: 5)
+end
+```
 
 ## JavaScript Coverage Reports
 

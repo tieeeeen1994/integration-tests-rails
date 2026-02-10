@@ -39,7 +39,8 @@ module IntegrationTestsRails
 
     attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote,
                   :chrome_url, :tests_page_html, :window_size, :max_server_retries,
-                  :verbose, :timeout, :server_host, :server_port, :puma_threads, :experimental_features
+                  :verbose, :timeout, :server_host, :server_port, :puma_threads, :experimental_features,
+                  :retry_attempts, :retry_sleep_duration
 
     def initialize
       @backup_dir = 'tmp/js_backup'
@@ -50,6 +51,8 @@ module IntegrationTestsRails
       @output_dir = 'tmp/instrumented_js'
       @puma_threads = '1:1'
       @remote = false
+      @retry_attempts = 1
+      @retry_sleep_duration = 0
       @server_host = '0.0.0.0' # rubocop:disable Style/IpAddresses
       @server_port = nil
       @source_dir = 'app/javascript'

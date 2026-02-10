@@ -36,6 +36,7 @@ module IntegrationTestsRails
 
         def configure_rspec
           RSpec.configure do |config|
+            config.include Dsl, type: :feature
             config.before(:each, type: :feature) do
               ::Capybara.current_driver = ::Capybara.javascript_driver
               IntegrationTestsRails::Capybara::Util.ensure_server_ready(self)
