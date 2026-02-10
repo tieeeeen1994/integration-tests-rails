@@ -15,7 +15,7 @@ module IntegrationTestsRails
         rescue RSpec::Expectations::ExpectationNotMetError, Capybara::ElementNotFound => e
           counter += 1
           Util.log("Attempt #{counter} for #{RSpec.current_example.full_description} failed!")
-          raise e if counter >= attempts
+          raise e if counter > attempts
 
           sleep(sleep_duration) if sleep_duration.positive?
           retry
