@@ -8,7 +8,7 @@ module IntegrationTestsRails
         config = IntegrationTestsRails.configuration
         attempts ||= config.retry_attempts
         sleep_duration ||= config.retry_sleep_duration
-        capture_exceptions ||= config.retry_capture_exceptions
+        capture_exceptions ||= constantize_exceptions(config)
         counter = 0
 
         begin
@@ -21,6 +21,12 @@ module IntegrationTestsRails
           sleep(sleep_duration) if sleep_duration.positive?
           retry
         end
+      end
+
+      private
+
+      def constantize_exceptions(config)
+        config.retry_capture_exceptions.filter_map { |e| e.constantize if e.is_a?(String) }
       end
     end
   end

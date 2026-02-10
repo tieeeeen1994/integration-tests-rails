@@ -52,7 +52,7 @@ module IntegrationTestsRails
       @puma_threads = '1:1'
       @remote = false
       @retry_attempts = 1
-      @retry_capture_exceptions = [RSpec::Expectations::ExpectationNotMetError, Capybara::ElementNotFound]
+      @retry_capture_exceptions = ['RSpec::Expectations::ExpectationNotMetError', 'Capybara::ElementNotFound']
       @retry_sleep_duration = 0
       @server_host = '0.0.0.0' # rubocop:disable Style/IpAddresses
       @server_port = nil

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'helpers'
+require_relative 'dsl'
 require_relative 'tests_controller'
 
 module IntegrationTestsRails
