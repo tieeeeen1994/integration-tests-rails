@@ -37,6 +37,35 @@ module IntegrationTestsRails
 
           puts 'Integration tests environment setup complete.'
         end
+
+        namespace :istanbul do
+          desc 'Remove Istanbul installation.'
+          task uninstall: :environment do
+            puts 'Removing Istanbul...'
+            system('yarn remove istanbul-lib-instrument istanbul-lib-coverage istanbul-lib-report istanbul-reports')
+            puts 'Istanbul removed. '
+
+            if File.exist?('.gitignore')
+              content = File.read('.gitignore')
+              new_content = content.dup
+              lines_to_remove = ['tmp/instrumented_js/', 'tmp/js_backup/']
+              lines_to_remove.each do |line|
+                if content.include?(line)
+                  new_content = new_content.gsub("#{line}\n", '')
+                  puts "Removed '#{line}' from .gitignore."
+                else
+                  puts "'#{line}' not found in .gitignore. Skipping."
+                end
+              end
+              if new_content == content
+                puts 'No changes made to .gitignore.'
+              else
+                File.write('.gitignore', new_content)
+                puts '.gitignore updated.'
+              end
+            end
+          end
+        end
       end
     end
     # rubocop:enable Metrics/BlockLength

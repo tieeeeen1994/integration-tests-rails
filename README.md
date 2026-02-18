@@ -63,6 +63,7 @@ The `IntegrationTestsRails.setup` method accepts an optional block for further c
 ```ruby
 IntegrationTestsRails.setup do |config|
   config.chrome_url = nil # Used for remote Chrome instances. Needs remote to be true.
+  config.js_coverage = true # Whether to enable JavaScript coverage using Istanbul.
   config.max_server_retries = 1000 # Before running the tests, Cuprite starts a server to communicate with Chrome. This sets the maximum number of retries to connect to that server.
   config.puma_threads = '1:1' # Number of threads for the Puma server used by Cuprite.
   config.remote = false # Whether to use a remote Chrome instance.
@@ -254,7 +255,7 @@ end
 
 ## JavaScript Coverage Reports
 
-After the tests (successful, failed or cancelled), coverage reports will be generated in `coverage/javascript` by default.
+After the tests (successful, failed or cancelled), coverage reports will be generated in `coverage/javascript` by default. This can be disabled in the configuration by setting `js_coverage` to `false`. Be sure to uninstall Istanbul packages through the rake task `rake integration_tests_rails:istanbul:uninstall` if you do not need this feature.
 
 ## Example Setups
 

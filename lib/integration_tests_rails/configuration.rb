@@ -37,9 +37,9 @@ module IntegrationTestsRails
       </html>
     HTML
 
-    attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote,
-                  :chrome_url, :tests_page_html, :window_size, :max_server_retries,
-                  :verbose, :timeout, :server_host, :server_port, :puma_threads, :experimental_features,
+    attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote, :chrome_url, :window_size,
+                  :tests_page_html, :max_server_retries, :verbose, :js_coverage,
+                  :timeout, :server_host, :server_port, :puma_threads, :experimental_features,
                   :retry_attempts, :retry_sleep_duration, :retry_capture_exceptions
 
     def initialize
@@ -47,6 +47,7 @@ module IntegrationTestsRails
       @chrome_url = nil
       @coverage_path = 'coverage/nyc'
       @experimental_features = false
+      @js_coverage = true
       @max_server_retries = 1000
       @output_dir = 'tmp/instrumented_js'
       @puma_threads = '1:1'
