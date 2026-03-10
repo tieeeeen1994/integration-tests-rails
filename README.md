@@ -62,6 +62,7 @@ The `IntegrationTestsRails.setup` method accepts an optional block for further c
 
 ```ruby
 IntegrationTestsRails.setup do |config|
+  config.auto_retry = false # Whether to automatically wrap all examples inside retry_on_fail block.
   config.chrome_url = nil # Used for remote Chrome instances. Needs remote to be true.
   config.js_coverage = true # Whether to enable JavaScript coverage using Istanbul.
   config.max_server_retries = 1000 # Before running the tests, Cuprite starts a server to communicate with Chrome. This sets the maximum number of retries to connect to that server.
@@ -252,6 +253,20 @@ retry_on_fail(retry_attempts: 3, retry_sleep_duration: 1, capture_exceptions: [S
   expect(page).to have_css('div#animated-element', visible: :visible, wait: 5)
 end
 ```
+
+### Auto Retry
+
+If you want to automatically retry all examples in a test suite without having to wrap them in `retry_on_fail`, you can set the `auto_retry` configuration option to `true`. This will automatically wrap all examples in a `retry_on_fail` block with the configured number of retries, exceptions to capture and sleep duration between retries.
+
+It is possible to pass custom arguments with `auto_retry` enabled through example metadata:
+
+```ruby
+it 'is a flaky test', auto_retry: { retry_attempts: 3, retry_sleep_duration: 2, capture_exceptions: [StandardError] } do
+  expect(page).to have_css('div#popover', visible: :visible, wait: 8)
+end
+```
+
+If no metadata is passed, it will use the default configuration values.
 
 ## JavaScript Coverage Reports
 
