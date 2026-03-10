@@ -43,6 +43,15 @@ module IntegrationTestsRails
               IntegrationTestsRails::Capybara::Util.ensure_server_ready(self)
             end
 
+            config.around(:each, type: :feature) do |example|
+              if IntegrationTestsRails.configuration.auto_retry
+                kwargs = example.metadata.fetch(:auto_retry, {})
+                retry_on_fail(**kwargs) { example.run }
+              else
+                example.run
+              end
+            end
+
             if IntegrationTestsRails.configuration.experimental_features
               config.include(Helper, type: :feature, unit: true)
             end

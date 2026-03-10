@@ -5,12 +5,19 @@ detectors:
     exclude:
       - IntegrationTestsRails::Configuration
 
+  DuplicateMethodCall:
+    exclude:
+      - IntegrationTestsRails::Capybara::Util#configure_rspec
+
   FeatureEnvy:
     exclude:
       - IntegrationTestsRails::Capybara::Dsl#retry_on_fail
 
   LongParameterList:
     max_params: 5
+
+  NestedIterators:
+    max_allowed_nesting: 2
 
   TooManyStatements:
     max_statements: 15

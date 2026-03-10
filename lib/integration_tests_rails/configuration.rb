@@ -38,11 +38,12 @@ module IntegrationTestsRails
     HTML
 
     attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote, :chrome_url, :window_size,
-                  :tests_page_html, :max_server_retries, :verbose, :js_coverage,
+                  :tests_page_html, :max_server_retries, :verbose, :js_coverage, :auto_retry,
                   :timeout, :server_host, :server_port, :puma_threads, :experimental_features,
                   :retry_attempts, :retry_sleep_duration, :retry_capture_exceptions
 
-    def initialize
+    def initialize # rubocop:disable Metrics/MethodLength
+      @auto_retry = false
       @backup_dir = 'tmp/js_backup'
       @chrome_url = nil
       @coverage_path = 'coverage/nyc'
