@@ -15,7 +15,7 @@ module IntegrationTestsRails
           yield
         rescue *capture_exceptions => e
           counter += 1
-          Util.log("Attempt #{counter} for #{RSpec.current_example.full_description} failed!")
+          Util.log("Inline Retry Attempt #{counter} for #{RSpec.current_example.full_description} failed!")
           raise e if counter > attempts
 
           sleep(sleep_duration) if sleep_duration.positive?

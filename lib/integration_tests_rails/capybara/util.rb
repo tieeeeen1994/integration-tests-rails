@@ -2,6 +2,7 @@
 
 require_relative 'helpers'
 require_relative 'dsl'
+require_relative 'retry'
 require_relative 'tests_controller'
 
 module IntegrationTestsRails
@@ -12,6 +13,28 @@ module IntegrationTestsRails
         def configure_webmock
           WebMock.disable_net_connect!(allow_localhost: true)
           log 'WebMock configured to allow localhost connections'
+        end
+
+        def configure_routes
+          return unless IntegrationTestsRails.configuration.experimental_features
+
+          app = Rails.application
+          routes = app.routes
+          # Use append and let Rails handle finalization automatically
+          routes.append do
+            get '/tests', to: 'tests#index', as: :tests
+          end
+          routes.instance_variable_set(:@finalized, false)
+          routes.finalize!
+          log 'Routes appended.'
+        end
+
+        def verbose?
+          IntegrationTestsRails.configuration.verbose
+        end
+
+        def log(message)
+          puts "[CAPYBARA] #{message}" if verbose?
         end
 
         def ensure_server_ready(context)
@@ -38,46 +61,32 @@ module IntegrationTestsRails
         def configure_rspec
           RSpec.configure do |config|
             config.include Dsl, type: :feature
-            config.before(:each, type: :feature) do
-              ::Capybara.current_driver = ::Capybara.javascript_driver
-              IntegrationTestsRails::Capybara::Util.ensure_server_ready(self)
-            end
-
-            config.around(:each, type: :feature) do |example|
-              if IntegrationTestsRails.configuration.auto_retry
-                kwargs = example.metadata.fetch(:auto_retry, {})
-                retry_on_fail(**kwargs) { example.run }
-              else
-                example.run
-              end
-            end
-
+            configure_before_hook(config)
+            configure_around_hook(config)
             if IntegrationTestsRails.configuration.experimental_features
-              config.include(Helper, type: :feature, unit: true)
+              config.include(Helper, type: :feature,
+                                     unit: true)
             end
           end
         end
 
-        def configure_routes
-          return unless IntegrationTestsRails.configuration.experimental_features
+        private
 
-          app = Rails.application
-          routes = app.routes
-          # Use append and let Rails handle finalization automatically
-          routes.append do
-            get '/tests', to: 'tests#index', as: :tests
+        def configure_before_hook(config)
+          config.before(:each, type: :feature) do
+            ::Capybara.current_driver = ::Capybara.javascript_driver
+            IntegrationTestsRails::Capybara::Util.ensure_server_ready(self)
           end
-          routes.instance_variable_set(:@finalized, false)
-          routes.finalize!
-          log 'Routes appended.'
         end
 
-        def verbose?
-          IntegrationTestsRails.configuration.verbose
-        end
-
-        def log(message)
-          puts "[CAPYBARA] #{message}" if verbose?
+        def configure_around_hook(config)
+          config.around(:each, type: :feature) do |example|
+            if IntegrationTestsRails.configuration.auto_retry
+              Retry.run(example, self)
+            else
+              example.run
+            end
+          end
         end
       end
     end
