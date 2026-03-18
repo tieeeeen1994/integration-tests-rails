@@ -12,11 +12,11 @@ module IntegrationTestsRails
           (attempts + 1).times do |attempt_number|
             reset_example_state(context)
             example.run
-            ex = RSpec.current_example.exception
+            ex = example.exception
             break unless ex
             break unless capture_exceptions.any? { |klass| ex.is_a?(klass) }
 
-            Util.log "Auto Retry Attempt #{attempt_number + 1} failed for: #{description}"
+            Util.log "Auto Retry Attempt #{attempt_number + 1} failed for: #{description} (#{ex.class})"
             sleep(sleep_duration) if attempt_number < attempts && sleep_duration.positive?
           end
         end
