@@ -40,7 +40,7 @@ module IntegrationTestsRails
     attr_accessor :source_dir, :output_dir, :backup_dir, :coverage_path, :wait_time, :remote, :chrome_url, :window_size,
                   :tests_page_html, :max_server_retries, :verbose, :js_coverage, :auto_retry,
                   :timeout, :server_host, :server_port, :puma_threads, :experimental_features,
-                  :retry_attempts, :retry_sleep_duration, :retry_capture_exceptions
+                  :retry_attempts, :retry_sleep_duration, :retry_capture_exceptions, :headless
 
     def initialize # rubocop:disable Metrics/MethodLength
       @auto_retry = false
@@ -48,6 +48,7 @@ module IntegrationTestsRails
       @chrome_url = nil
       @coverage_path = 'coverage/nyc'
       @experimental_features = false
+      @headless = false
       @js_coverage = true
       @max_server_retries = 1000
       @output_dir = 'tmp/instrumented_js'

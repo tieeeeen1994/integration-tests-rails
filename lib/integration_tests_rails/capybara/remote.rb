@@ -34,6 +34,7 @@ module IntegrationTestsRails
             timeout = config.timeout
             options = {
               window_size: config.window_size,
+              headless: config.headless,
               browser_options: {
                 'no-sandbox': nil,
                 'disable-dev-shm-usage': nil

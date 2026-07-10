@@ -23,6 +23,7 @@ module IntegrationTestsRails
           ::Capybara.register_driver(:cuprite) do |app|
             options = {
               window_size: config.window_size,
+              headless: config.headless,
               browser_options: {
                 'no-sandbox' => nil,
                 'disable-dev-shm-usage' => nil,

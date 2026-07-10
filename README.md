@@ -64,6 +64,7 @@ The `IntegrationTestsRails.setup` method accepts an optional block for further c
 IntegrationTestsRails.setup do |config|
   config.auto_retry = false # Whether to automatically wrap all examples inside retry_on_fail block.
   config.chrome_url = nil # Used for remote Chrome instances. Needs remote to be true.
+  config.headless = false # Whether to run Chrome in headless mode.
   config.js_coverage = true # Whether to enable JavaScript coverage using Istanbul.
   config.max_server_retries = 1000 # Before running the tests, Cuprite starts a server to communicate with Chrome. This sets the maximum number of retries to connect to that server.
   config.puma_threads = '1:1' # Number of threads for the Puma server used by Cuprite.
