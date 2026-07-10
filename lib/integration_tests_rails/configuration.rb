@@ -42,7 +42,7 @@ module IntegrationTestsRails
                   :timeout, :server_host, :server_port, :puma_threads, :experimental_features,
                   :retry_attempts, :retry_sleep_duration, :retry_capture_exceptions, :headless
 
-    def initialize # rubocop:disable Metrics/MethodLength
+    def initialize # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       @auto_retry = false
       @backup_dir = 'tmp/js_backup'
       @chrome_url = nil
