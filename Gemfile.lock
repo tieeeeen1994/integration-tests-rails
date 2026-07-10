@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    integration-tests-rails (1.1.9)
+    integration-tests-rails (1.1.10)
       capybara
       cuprite
       rails
