@@ -48,7 +48,7 @@ module IntegrationTestsRails
       @chrome_url = nil
       @coverage_path = 'coverage/nyc'
       @experimental_features = false
-      @headless = false
+      @headless = true
       @js_coverage = true
       @max_server_retries = 1000
       @output_dir = 'tmp/instrumented_js'
